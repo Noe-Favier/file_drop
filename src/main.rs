@@ -1,19 +1,28 @@
 use std::net::{SocketAddr, TcpListener, TcpStream};
 use std::fs::{DirBuilder, self};
 
+mod page_home; 
+
 static LOG_CATEGORY_CENTER_WIDTH: usize = 15; //used to have the [  TEXT  ] effect in `log(..)`
 
 static LOG_INFO : &str =            "INFO";
 static LOG_STREAM_ERROR : &str =    "SREAM ERROR";
 static LOG_FILE_SYSTEM : &str =     "FILE SYSTEM";
+static LOG_FILE_SYSTEM_ERR : &str = "FILE SYSTEM ERROR";
 static LOG_SERVER : &str =          "SERVER";
+
+//
+static FILE_PATH: &str = "./files";
+//
 
 fn handle_client(stream: TcpStream) {
     log(&format!("new client : [{}]", stream.local_addr().unwrap().ip()), &LOG_INFO);
+    println!("{}", page_home::get_home_html(FILE_PATH));
 }
 
 fn log(msg: &str, category: &str){
     println!("[{:^w$}] > {}", category, msg, w=LOG_CATEGORY_CENTER_WIDTH);
+    return ();
 }
 fn main() {
     //setup multiple ip adress (if one of them is unavailable)
@@ -21,8 +30,6 @@ fn main() {
         SocketAddr::from(([127, 0, 0, 1], 80)),
         SocketAddr::from(([127, 0, 0, 1], 8080)),
     ];
-    
-    const FILE_PATH: &str = "./files";
 
     //check if the folder exists :
     if fs::metadata(FILE_PATH).is_err() {
