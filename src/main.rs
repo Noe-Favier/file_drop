@@ -5,16 +5,17 @@ use std::string::{String};
 
 mod page_home; 
 mod page_404;
-
+mod page_favicon;
 
 static AUTHORIZED_PROTOCOLS: [&str; 2] = ["POST", "GET"];
-static LOG_CATEGORY_CENTER_WIDTH: usize = 15; //used to have the [  TEXT  ] effect in `log(..)`
+static LOG_CATEGORY_CENTER_WIDTH: usize = 20; //used to have the [  TEXT  ] effect in `log(..)`
 
-static LOG_INFO : &str =            "INFO";
-static LOG_STREAM_INFO : &str =     "INFO STREAM";
-static LOG_STREAM_ERROR : &str =    "SREAM ERROR";
-static LOG_FILE_SYSTEM : &str =     "FILE SYSTEM";
-static LOG_SERVER : &str =          "SERVER";
+static LOG_INFO : &str =                "INFO";
+static LOG_STREAM_INFO : &str =         "INFO STREAM";
+static LOG_STREAM_ERROR : &str =        "SREAM ERROR";
+static LOG_FILE_SYSTEM : &str =         "FILE SYSTEM";
+static LOG_FILE_SYSTEM_ERROR : &str =   "FILE SYSTEM ERROR";
+static LOG_SERVER : &str =              "SERVER";
 
 //
 static FILE_PATH: &str = "./files";
@@ -112,7 +113,10 @@ fn controller(mut stream: TcpStream, first_arg: String, route: String){
 
         "/favicon.ico" => {
             // FAVICON //
-            println!("ICO");
+            match stream.write(&page_favicon::get_http_frame_favicon()) {
+                Ok(result) => log(&format!("sent favicon ({} bytes) to @{}", result, client_ip), &LOG_STREAM_INFO),
+                Err(_err) => log(&format!("can't send favicon to @{}", client_ip), &LOG_STREAM_ERROR)
+            };
             //\\
         },
 
