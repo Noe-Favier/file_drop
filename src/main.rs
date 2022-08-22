@@ -1,7 +1,8 @@
-use std::io::Read;
+use std::io::{Read, Write};
 use std::net::{SocketAddr, TcpListener, TcpStream};
 use std::fs::{DirBuilder, self};
 use std::string::{String};
+
 mod page_home; 
 
 
@@ -9,6 +10,7 @@ static AUTHORIZED_PROTOCOLS: [&str; 2] = ["POST", "GET"];
 static LOG_CATEGORY_CENTER_WIDTH: usize = 15; //used to have the [  TEXT  ] effect in `log(..)`
 
 static LOG_INFO : &str =            "INFO";
+static LOG_STREAM_INFO : &str =     "INFO STREAM";
 static LOG_STREAM_ERROR : &str =    "SREAM ERROR";
 static LOG_FILE_SYSTEM : &str =     "FILE SYSTEM";
 static LOG_SERVER : &str =          "SERVER";
@@ -63,8 +65,6 @@ fn handle_client(mut stream: TcpStream) {
 
     let mut route: String = "".to_string();
     let mut first_arg: String = "".to_string();
-    
-    log(&format!("new client @{}", stream.local_addr().unwrap().ip()), &LOG_INFO);
 
     if read_size > 0 { //if the stream gave us some content to read:
         req = String::from_utf8_lossy(&buffer).to_string(); //then we get a string from it 
@@ -89,10 +89,36 @@ fn handle_client(mut stream: TcpStream) {
     //println!("{}", page_home::get_http_frame_home(FILE_PATH));
 }
 
-fn controller(stram: TcpStream, first_arg: String, route: String){
+fn controller(mut stream: TcpStream, first_arg: String, route: String){
+    let client_ip = stream.local_addr().unwrap().ip();
+    log(&format!("new client @{}", client_ip), &LOG_INFO);
+
     match first_arg.as_str() {
-        "/"     => println!("HOME"),
-        "/file" => println!("DOWNLOAD"),
-        _ => println!("404")
+        "/"     => {
+            // HOME //
+            match stream.write(page_home::get_http_frame_home(FILE_PATH).as_bytes()) {
+                Ok(result) => log(&format!("sent home ({} bytes) to @{}", result, client_ip), &LOG_STREAM_INFO),
+                Err(_err) => log(&format!("can't send home to @{}", client_ip), &LOG_STREAM_ERROR)
+            };
+            //\\
+        },
+        
+        "/file" => {
+            // DOWNLOAD FILE //
+            println!("DOWNLOAD");
+            //\\
+        },
+
+        "/favicon.ico" => {
+            // FAVICON //
+            println!("ICO");
+            //\\
+        },
+
+        _ => {
+            // ERROR 404 //
+            println!("404");
+            //\\
+        }
     };
 }
