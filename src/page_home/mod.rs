@@ -1,7 +1,6 @@
-use std::net::{TcpStream};
 use std::fs::{read_to_string, read_dir, ReadDir};
 
-pub fn get_HTTPframe_home(path_to_files: &str) -> String {
+pub fn get_http_frame_home(path_to_files: &str) -> String {
     let html_content: String = get_home_html(path_to_files);
     return get_home_headers(html_content.len()) + &html_content;
 }
