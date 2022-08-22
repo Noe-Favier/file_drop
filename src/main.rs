@@ -4,6 +4,7 @@ use std::fs::{DirBuilder, self};
 use std::string::{String};
 
 mod page_home; 
+mod page_404;
 
 
 static AUTHORIZED_PROTOCOLS: [&str; 2] = ["POST", "GET"];
@@ -117,7 +118,10 @@ fn controller(mut stream: TcpStream, first_arg: String, route: String){
 
         _ => {
             // ERROR 404 //
-            println!("404");
+            match stream.write(page_404::get_http_frame_404().as_bytes()) {
+                Ok(result) => log(&format!("sent 404 ({} bytes) to @{}", result, client_ip), &LOG_STREAM_INFO),
+                Err(_err) => log(&format!("can't send 404 to @{}", client_ip), &LOG_STREAM_ERROR)
+            };
             //\\
         }
     };
