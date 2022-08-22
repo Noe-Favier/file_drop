@@ -1,29 +1,38 @@
 use std::net::{TcpStream};
-use std::fs::{read_to_string, read_dir};
+use std::fs::{read_to_string, read_dir, ReadDir};
 
-pub fn send_home(stream: TcpStream, pathToFiles: &str) -> String {
-    return get_home_headers() + &get_home_html(pathToFiles);
+pub fn get_HTTPframe_home(path_to_files: &str) -> String {
+    let html_content: String = get_home_html(path_to_files);
+    return get_home_headers(html_content.len()) + &html_content;
 }
 
-fn get_home_headers() -> String {
-    return "headers\n".to_string();
+fn get_home_headers(length: usize) -> String {
+    return "HTTP/1.1 200 OK\r\nContent-Length: CONTENT_LENGTH\r\nContent-Type: text/html\r\n\r\n".replace("CONTENT_LENGTH", &length.to_string()).to_string();
 }
 
-pub fn get_home_html(pathToFiles: &str) -> String {
-    let filename = "page_home/home.noehtml";
+fn get_home_html(path_to_files: &str) -> String {
+    let filename = "src/page_home/home.html";
     return read_to_string(filename)
         .expect(&format!("ERR ! FILE \"{}\" NOT FOUND", filename))
-        .replace("<!--ELEMENTS_HERE-->", &get_elt_divs(pathToFiles));
+        .replace("<!--ELEMENTS_HERE-->", &get_elt_divs(path_to_files));
 }
 
 fn get_elt_divs(path_to_files: &str) -> String {
-    let to_be_returned: &str = "";
-    if let Ok(entries) = read_dir(path_to_files) {
-        for entry in entries {
-            if let Ok(entry) = entry {
-                to_be_returned.to_string().push_str(&format!("<p>{:?}</p>", entry.file_name()));
-            }
-        }
+    let mut to_be_returned: String = "".to_string();
+
+    //get files in the "files" dir 
+    let paths: ReadDir = read_dir(path_to_files).unwrap();
+
+    //next, we'll inject them into home.html
+    for path in paths {
+        let default_filename: String = "<em>Untilted</em>".to_string();
+        let filename: String;
+        filename = match path {
+            Err(_x) => default_filename,
+            Ok(f) => {f.file_name().to_os_string().to_str().unwrap_or(&default_filename).to_string()}
+        };
+
+        to_be_returned.push_str(&("<p>".to_string() + &filename + "</p>"));
     }
     return to_be_returned.to_string();
 }

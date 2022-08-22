@@ -8,7 +8,6 @@ static LOG_CATEGORY_CENTER_WIDTH: usize = 15; //used to have the [  TEXT  ] effe
 static LOG_INFO : &str =            "INFO";
 static LOG_STREAM_ERROR : &str =    "SREAM ERROR";
 static LOG_FILE_SYSTEM : &str =     "FILE SYSTEM";
-static LOG_FILE_SYSTEM_ERR : &str = "FILE SYSTEM ERROR";
 static LOG_SERVER : &str =          "SERVER";
 
 //
@@ -16,8 +15,8 @@ static FILE_PATH: &str = "./files";
 //
 
 fn handle_client(stream: TcpStream) {
-    log(&format!("new client : [{}]", stream.local_addr().unwrap().ip()), &LOG_INFO);
-    println!("{}", page_home::get_home_html(FILE_PATH));
+    log(&format!("new client @{}", stream.local_addr().unwrap().ip()), &LOG_INFO);
+    println!("{}", page_home::get_HTTPframe_home(FILE_PATH));
 }
 
 fn log(msg: &str, category: &str){
