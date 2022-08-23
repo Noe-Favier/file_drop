@@ -31,7 +31,7 @@ fn get_elt_divs(path_to_files: &str) -> String {
             Ok(f) => {f.file_name().to_os_string().to_str().unwrap_or(&default_filename).to_string()}
         };
 
-        to_be_returned.push_str(&("<p>".to_string() + &filename + "</p>"));
+        to_be_returned.push_str(&format!("<a href=/file/{name}> {name} </a>",name=filename));
     }
     return to_be_returned.to_string();
 }
