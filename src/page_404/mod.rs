@@ -1,4 +1,4 @@
-use std::fs::{read_to_string};
+use std::fs::read_to_string;
 
 pub fn get_http_frame_404() -> String {
     let html_content: String = get_404_html();

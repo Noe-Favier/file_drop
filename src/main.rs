@@ -1,7 +1,7 @@
 use std::io::{Read, Write};
 use std::net::{SocketAddr, TcpListener, TcpStream};
 use std::fs::{DirBuilder, self};
-use std::string::{String};
+use std::string::String;
 
 mod page_home; 
 mod page_404;
@@ -15,7 +15,6 @@ static LOG_INFO : &str =                "INFO";
 static LOG_STREAM_INFO : &str =         "INFO STREAM";
 static LOG_STREAM_ERROR : &str =        "SREAM ERROR";
 static LOG_FILE_SYSTEM : &str =         "FILE SYSTEM";
-static LOG_FILE_SYSTEM_ERROR : &str =   "FILE SYSTEM ERROR";
 static LOG_SERVER : &str =              "SERVER";
 
 //

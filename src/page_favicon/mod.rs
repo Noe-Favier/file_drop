@@ -1,4 +1,4 @@
-use std::fs::{File};
+use std::fs::File;
 use std::io::Read;
 
 pub fn get_http_frame_favicon() -> Vec<u8> {
