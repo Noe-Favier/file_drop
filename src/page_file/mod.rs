@@ -1,12 +1,13 @@
-use std::fs::{File};
+use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 
-pub fn get_http_frame_file(file_path: String) -> Vec<u8> {
-    if Path::new("/etc/hosts").exists(){
-        let mut ico: Vec<u8> = get_file(file_path);
-        let mut tmp: Vec<u8> = get_file_headers(ico.len());
-        tmp.append(&mut ico);
+pub fn get_http_frame_file(path_to_files: String, file_name: String) -> Vec<u8> {
+    let file_path: String = path_to_files+&file_name;
+    if Path::new(&file_path).exists(){
+        let mut file: Vec<u8> = get_file(file_path);
+        let mut tmp: Vec<u8> = get_file_headers(file.len());
+        tmp.append(&mut file);
         return tmp;
     }
     return [0;0].to_vec(); //we return nothing if the file doesn't exist

@@ -92,7 +92,7 @@ fn handle_client(mut stream: TcpStream) {
     //println!("{}", page_home::get_http_frame_home(FILE_PATH));
 }
 
-fn controller(mut stream: TcpStream, first_arg: String, route: String){
+fn controller(mut stream: TcpStream, first_arg: String, mut route: String){
     let client_ip = stream.local_addr().unwrap().ip();
     log(&format!("new client @{}", client_ip), &LOG_INFO);
 
@@ -108,14 +108,13 @@ fn controller(mut stream: TcpStream, first_arg: String, route: String){
         
         "/file" => {
             // DOWNLOAD FILE //
-            let mut state: String = route;
-            let mut buffer: Vec<u8> = page_file::get_http_frame_file(route.replace("/file", ""));
+            let mut buffer: Vec<u8> = page_file::get_http_frame_file(FILE_PATH.to_string(),route.replace("/file", "").to_string());
             if buffer.len() <=0 {
                 buffer = page_404::get_http_frame_404().as_bytes().to_vec();
-                state = "404".to_string();
+                route = "404".to_string();
             }
             match stream.write(&buffer) {
-                Ok(result) => log(&format!("sent {} ({} bytes) to @{}", state, result, client_ip), &LOG_STREAM_INFO),
+                Ok(result) => log(&format!("sent {} ({} bytes) to @{}", route, result, client_ip), &LOG_STREAM_INFO),
                 Err(_err) => log(&format!("can't send file to @{}", client_ip), &LOG_STREAM_ERROR)
             };
             //\\
