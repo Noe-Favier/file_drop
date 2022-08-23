@@ -24,7 +24,7 @@ fn get_file_headers(length: usize) -> Vec<u8> {
 }
 
 fn get_file(file_path: String) -> Vec<u8> {
-    let mut file = File::open(file_path).expect("Unable to open file");
+    let mut file: File = File::open(file_path).expect("Unable to open file");
     let mut content: Vec<u8> = Vec::new();
     file.read_to_end(&mut content).expect(&format!("ERROR READING file"));
     return content;

@@ -10,7 +10,7 @@ fn get_404_headers(length: usize) -> String {
 }
 
 fn get_404_html() -> String {
-    let filename = "src/page_404/404.html";
+    let filename: &str = "src/page_404/404.html";
     return read_to_string(filename)
         .expect(&format!("ERR ! FILE \"{}\" NOT FOUND", filename))
 }

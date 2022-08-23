@@ -10,7 +10,7 @@ fn get_home_headers(length: usize) -> String {
 }
 
 fn get_home_html(path_to_files: &str) -> String {
-    let filename = "src/page_home/home.html";
+    let filename: &str = "src/page_home/home.html";
     return read_to_string(filename)
         .expect(&format!("ERR ! FILE \"{}\" NOT FOUND", filename))
         .replace("<!--ELEMENTS_HERE-->", &get_elt_divs(path_to_files));

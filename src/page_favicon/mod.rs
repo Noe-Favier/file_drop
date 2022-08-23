@@ -19,7 +19,7 @@ fn get_favicon_headers(length: usize) -> Vec<u8> {
 }
 
 fn get_favicon() -> Vec<u8> {
-    let mut file = File::open("src/page_favicon/favicon.ico").expect("Unable to open favicon");
+    let mut file: File = File::open("src/page_favicon/favicon.ico").expect("Unable to open favicon");
     let mut content: Vec<u8> = Vec::new();
     file.read_to_end(&mut content).expect(&format!("ERROR READING FAVICON"));
     return content;

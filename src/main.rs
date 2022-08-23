@@ -27,7 +27,7 @@ fn log(msg: &str, category: &str){
 }
 fn main() {
     //setup multiple ip adress (if one of them is unavailable)
-    let addrs = [
+    let addrs:[SocketAddr; 2] = [
         SocketAddr::from(([127, 0, 0, 1], 80)),
         SocketAddr::from(([127, 0, 0, 1], 8080)),
     ];
@@ -43,7 +43,7 @@ fn main() {
     }
 
     //run server
-    let listener = TcpListener::bind(&addrs[..]).unwrap();
+    let listener: TcpListener = TcpListener::bind(&addrs[..]).unwrap();
     log(&format!("running on : {}", listener.local_addr().unwrap().ip()), LOG_SERVER);
 
 
@@ -61,8 +61,8 @@ fn main() {
 }
 
 fn handle_client(mut stream: TcpStream) {
-    let mut buffer = [0;512];
-    let read_size = stream.read(&mut buffer[..]).unwrap_or_default();
+    let mut buffer: [u8; 512] = [0;512];
+    let read_size: usize = stream.read(&mut buffer[..]).unwrap_or_default();
     let req: String;
 
     let mut route: String = "".to_string();
