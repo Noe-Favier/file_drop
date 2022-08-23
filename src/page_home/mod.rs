@@ -23,15 +23,36 @@ fn get_elt_divs(path_to_files: &str) -> String {
     let paths: ReadDir = read_dir(path_to_files).unwrap();
 
     //next, we'll inject them into home.html
+    let default_filename: String = "<em>Untilted</em>".to_string();
     for path in paths {
-        let default_filename: String = "<em>Untilted</em>".to_string();
-        let filename: String;
-        filename = match path {
-            Err(_x) => default_filename,
-            Ok(f) => {f.file_name().to_os_string().to_str().unwrap_or(&default_filename).to_string()}
+        let opt: [String; 3]  = match path {
+            Err(_x) => {
+                    [
+                        "span".to_string(), 
+                        default_filename.to_owned(),
+                        "id".to_string()
+                    ]
+            },
+
+            Ok(f) => {
+                    [
+                        "a".to_string(), 
+                        f.file_name().to_os_string().to_str().unwrap_or(&default_filename).to_string(),
+                        "href".to_string()
+                    ]
+            }
         };
 
-        to_be_returned.push_str(&format!("<a href=/file/{name}> {name} </a>",name=filename));
+        to_be_returned.push_str(
+            &get_div_content(
+                opt[0].to_owned(),
+                opt[1].to_owned(),
+                opt[2].to_owned()
+        ));
     }
     return to_be_returned.to_string();
+}
+
+fn get_div_content(node: String, labl: String, attr: String) -> String{
+    return format!("<{n} {a}=\"{l}\"> {l} </{n}>", n=node, l=labl, a=attr);
 }
