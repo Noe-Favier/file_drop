@@ -6,6 +6,7 @@ use std::string::{String};
 mod page_home; 
 mod page_404;
 mod page_favicon;
+mod page_file;
 
 static AUTHORIZED_PROTOCOLS: [&str; 2] = ["POST", "GET"];
 static LOG_CATEGORY_CENTER_WIDTH: usize = 20; //used to have the [  TEXT  ] effect in `log(..)`
@@ -107,7 +108,16 @@ fn controller(mut stream: TcpStream, first_arg: String, route: String){
         
         "/file" => {
             // DOWNLOAD FILE //
-            println!("DOWNLOAD");
+            let mut state: String = route;
+            let mut buffer: Vec<u8> = page_file::get_http_frame_file(route.replace("/file", ""));
+            if buffer.len() <=0 {
+                buffer = page_404::get_http_frame_404().as_bytes().to_vec();
+                state = "404".to_string();
+            }
+            match stream.write(&buffer) {
+                Ok(result) => log(&format!("sent {} ({} bytes) to @{}", state, result, client_ip), &LOG_STREAM_INFO),
+                Err(_err) => log(&format!("can't send file to @{}", client_ip), &LOG_STREAM_ERROR)
+            };
             //\\
         },
 
