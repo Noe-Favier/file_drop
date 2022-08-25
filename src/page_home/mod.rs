@@ -54,5 +54,5 @@ fn get_elt_divs(path_to_files: &str) -> String {
 }
 
 fn get_div_content(node: String, labl: String, attr: String) -> String{
-    return format!("<{n} {a}=\"{l}\"> {l} </{n}>", n=node, l=labl, a=attr);
+    return format!("<{n} {a}=\"/file/{l}\"> {l} </{n}>", n=node, l=labl, a=attr);
 }
