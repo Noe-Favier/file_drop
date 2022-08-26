@@ -28,8 +28,8 @@ fn log(msg: &str, category: &str){
 fn main() {
     //setup multiple ip adress (if one of them is unavailable)
     let addrs:[SocketAddr; 2] = [
-        SocketAddr::from(([127, 0, 0, 1], 80)),
-        SocketAddr::from(([127, 0, 0, 1], 8080)),
+        SocketAddr::from(([0, 0, 0, 0], 80)),
+        SocketAddr::from(([0, 0, 0, 0], 8080)),
     ];
 
     //check if the folder exists :
