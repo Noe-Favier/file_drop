@@ -19,12 +19,12 @@ the main goal of fileDrop is to provide a light solution for people who wants to
 ## What's comming up next ? 
 
 
- 1. thread clients 
- 2. configuration file 
- 3. Logs optimised for systemd (with `log!()`)
- 4. Uploading (not only downloading) 
- 5. Authentification system
- 6. UI enhancement
+ - [x] thread clients 
+ - [ ] configuration file 
+ - [ ] Logs optimised for systemd (with `log!()`)
+ - [ ] Uploading (not only downloading) 
+ - [ ] Authentification system
+ - [ ] UI enhancement
 
 ## v1.0 DEMO :
 here is the video : (yeah i know my screen recorder messed up, i'll change it later)

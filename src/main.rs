@@ -1,3 +1,4 @@
+use std::thread;
 use std::io::{Read, Write};
 use std::net::{SocketAddr, TcpListener, TcpStream};
 use std::fs::{DirBuilder, self};
@@ -51,7 +52,7 @@ fn main() {
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
-                handle_client(stream);
+                thread::spawn(move || handle_client(stream));
             }
             Err(e) => { 
                 log(&format!("error ! client couldn't be handled : {}", e.to_string()), &LOG_STREAM_ERROR);
