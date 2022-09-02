@@ -73,7 +73,7 @@ fn handle_client(mut stream: TcpStream) {
         req = String::from_utf8_lossy(&buffer).to_string(); //then we get a string from it 
 
         for protocol in AUTHORIZED_PROTOCOLS {
-            if req.starts_with(protocol) { //if the HTTP protocol used by the client is valid :
+            if req.starts_with(protocol) ||AUTHORIZED_PROTOCOLS.len() == 0 { //if the HTTP protocol used by the client is valid : (or if no protocol were specified)
                 //exemple of req = "POST /route/defined/by/client HTTP/1.1 ..."
                 route = req.split_once(" HTTP").unwrap().0.to_string(); //get rid of " HTTP/1.1 ..."
                 route = route.split_at(protocol.len()+1).1.to_string(); //get rid of "POST "
@@ -81,6 +81,7 @@ fn handle_client(mut stream: TcpStream) {
                 let first_arg_index: usize = if route.starts_with("/") { 1 } else { 0 };
                 let tmp: Vec<&str> = route.split("/").collect();
                 first_arg = "/".to_string() + tmp.get(first_arg_index).unwrap();
+                break; //we've successfully found the protocol and sent the page to our client. We can stop here 
             }
         }
     }
@@ -88,8 +89,6 @@ fn handle_client(mut stream: TcpStream) {
     if !&route.is_empty() { //if the client has a valid request
         controller(stream, first_arg,route);
     }
-
-    //println!("{}", page_home::get_http_frame_home(FILE_PATH));
 }
 
 fn controller(mut stream: TcpStream, first_arg: String, mut route: String){
