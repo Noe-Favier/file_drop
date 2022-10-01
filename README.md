@@ -1,5 +1,8 @@
 
 # FileDrop 
+**THIS PROJECT WILL NEVER BE UPDATED**, i've created [FileDropV2](https://github.com/Noe-Favier/filedrop-v2)
+
+Also, FileDrop (V1) doesn't support heavy files
 ## What is it ?
 File Drop is a light cloud server that comes with a web interface which allows u to download files from a repertory on the server
 FileDrop is writtent in rust, without any dependency 
@@ -16,16 +19,6 @@ then u can wait for a github release i'll push soon
 yeah, ik...
 the main goal of fileDrop is to provide a light solution for people who wants to exchange files between a vps and their local machine. (for me as an example) 
 
-## What's comming up next ? 
-
-
- - [x] thread clients 
- - [ ] configuration file 
- - [ ] Logs optimised for systemd (with `log!()`)
- - [ ] Uploading (not only downloading) 
- - [ ] Authentification system
- - [ ] UI enhancement
-
 ## v1.0 DEMO :
-here is the video : (yeah i know my screen recorder messed up, i'll change it later)
+here is the video : (yeah i know my screen recorder messed up)
 [![embed demo](http://img.youtube.com/vi/FnUa7pbrLpo/0.jpg)](https://www.youtube.com/watch?v=FnUa7pbrLpo "V1.0 Demo")
